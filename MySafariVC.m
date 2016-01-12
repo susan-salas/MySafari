@@ -8,7 +8,11 @@
 
 #import "MySafariVC.h"
 
-@interface MySafariVC ()
+@interface MySafariVC () <UIWebViewDelegate, UITextFieldDelegate>
+@property (weak, nonatomic) IBOutlet UITextField *textField;
+@property (weak, nonatomic) IBOutlet UIWebView *webView;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+
 
 @end
 
@@ -16,13 +20,46 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    self.webView.delegate = self;
+    
+    [self.textField setReturnKeyType:UIReturnKeyGo];
+   
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (void) loadURL: (NSString *) url{
+    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
+    
+}
+
+- (BOOL) textFieldShouldReturn:(UITextField *)textField{
+    
+    [self loadURL:textField.text];
+    return YES;
+
+}
+
+- (void) webViewDidStartLoad:(UIWebView *)webView{
+    [self.activityIndicator startAnimating];
+
+}
+
+- (void) webViewDidFinishLoad:(UIWebView *)webView{
+    [self.activityIndicator stopAnimating];
+
+}
+
+- (void) webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
+
+}
+- (IBAction)refresh:(UIBarButtonItem *)sender {
+    [self.webView reload];
+}
+
 
 /*
 #pragma mark - Navigation
