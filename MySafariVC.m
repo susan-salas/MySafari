@@ -12,6 +12,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *rewindButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *nextPageButton;
 
 
 @end
@@ -23,7 +25,7 @@
     self.webView.delegate = self;
     
     [self.textField setReturnKeyType:UIReturnKeyGo];
-   
+    [self checkForRewindAndForward];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -38,7 +40,13 @@
 
 - (BOOL) textFieldShouldReturn:(UITextField *)textField{
     
-    [self loadURL:textField.text];
+    if ([textField.text hasPrefix:@"http://"]) {
+        [self loadURL:textField.text];
+    }else{
+        NSString *string = [NSString stringWithFormat:@"https://%@", textField.text];
+        [self loadURL:string];
+    }
+    
     return YES;
 
 }
@@ -50,7 +58,7 @@
 
 - (void) webViewDidFinishLoad:(UIWebView *)webView{
     [self.activityIndicator stopAnimating];
-
+    [self checkForRewindAndForward];
 }
 
 - (void) webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
@@ -59,6 +67,34 @@
 - (IBAction)refresh:(UIBarButtonItem *)sender {
     [self.webView reload];
 }
+
+- (IBAction)stopNavigation:(UIBarButtonItem *)sender {
+    [self.webView stopLoading];
+}
+
+- (IBAction)previousPage:(UIBarButtonItem *)sender {
+   
+    [self.webView goBack];
+
+}
+
+- (IBAction)nextPage:(UIBarButtonItem *)sender {
+    [self.webView goForward];
+}
+
+-(void) checkForRewindAndForward {
+    if ([self.webView canGoBack]) {
+        [self.rewindButton setTintColor:[UIColor blueColor]];
+    }else{
+        [self.rewindButton setTintColor:[UIColor grayColor]];
+    }
+    if ([self.webView canGoForward]) {
+        [self.nextPageButton setTintColor:[UIColor blueColor]];
+    }else{
+        [self.nextPageButton setTintColor:[UIColor grayColor]];
+    }
+}
+
 
 
 /*
