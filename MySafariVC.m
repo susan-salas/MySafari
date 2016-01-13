@@ -8,12 +8,15 @@
 
 #import "MySafariVC.h"
 
-@interface MySafariVC () <UIWebViewDelegate, UITextFieldDelegate>
+@interface MySafariVC () <UIWebViewDelegate, UITextFieldDelegate, UIScrollViewDelegate>
+
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *rewindButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *nextPageButton;
+@property (nonatomic) CGFloat pointNow;
+@property (weak, nonatomic) IBOutlet UINavigationItem *navBar;
 
 
 @end
@@ -23,6 +26,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.webView.delegate = self;
+    self.webView.scrollView.delegate = self;
     
     [self.textField setReturnKeyType:UIReturnKeyGo];
     [self checkForRewindAndForward];
@@ -59,6 +63,8 @@
 - (void) webViewDidFinishLoad:(UIWebView *)webView{
     [self.activityIndicator stopAnimating];
     [self checkForRewindAndForward];
+    self.textField.text = [[self.webView.request URL] absoluteString];
+     self.navBar.title=[webView stringByEvaluatingJavaScriptFromString:@"document.title"];
 }
 
 - (void) webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
@@ -95,6 +101,31 @@
     }
 }
 
+- (IBAction)comingSoon:(UIBarButtonItem *)sender {
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Coming Soon" message:@"stay tuned for things to come!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    
+    [alertView show];
+}
+
+- (IBAction)clearUrlBar:(UIButton *)sender {
+    self.textField.text = @"";
+}
+
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (self.pointNow > scrollView.contentOffset.y)
+    {
+        //scroll down
+        self.textField.alpha = 0;
+    }
+    else if (self.pointNow < scrollView.contentOffset.y)
+    {
+        //scroll up
+        self.textField.alpha = 1;
+    }
+    
+    self.pointNow = scrollView.contentOffset.y;
+}
 
 
 /*

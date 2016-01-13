@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--My SafariVC-->
@@ -17,24 +18,42 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <webView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fRT-3D-FT9">
-                                <rect key="frame" x="0.0" y="143" width="600" height="413"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </webView>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="uMi-Co-xZT">
                                 <rect key="frame" x="308" y="348" width="20" height="20"/>
                                 <color key="color" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             </activityIndicatorView>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="O2c-Pg-mXs">
-                                <rect key="frame" x="-8" y="113" width="600" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter URL" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="O2c-Pg-mXs">
+                                <rect key="frame" x="0.0" y="113" width="560" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardType="webSearch"/>
                                 <connections>
                                     <outlet property="delegate" destination="vXZ-lx-hvc" id="8qW-u7-rT4"/>
                                 </connections>
                             </textField>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fRT-3D-FT9">
+                                <rect key="frame" x="0.0" y="143" width="600" height="413"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </webView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4fA-Ij-zhf">
+                                <rect key="frame" x="568" y="113" width="30" height="30"/>
+                                <state key="normal" title="Del"/>
+                                <connections>
+                                    <action selector="clearUrlBar:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="XPW-fN-d1w"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="fRT-3D-FT9" firstAttribute="top" secondItem="4fA-Ij-zhf" secondAttribute="bottom" id="7Rx-Ql-n5j"/>
+                            <constraint firstItem="fRT-3D-FT9" firstAttribute="leading" secondItem="O2c-Pg-mXs" secondAttribute="leading" id="Ecl-ct-Bn4"/>
+                            <constraint firstItem="O2c-Pg-mXs" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="GIv-aS-n7K"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="O2c-Pg-mXs" secondAttribute="trailing" constant="20" id="NT1-YU-hGJ"/>
+                            <constraint firstItem="fRT-3D-FT9" firstAttribute="bottom" secondItem="2fi-mo-0CV" secondAttribute="top" id="UCs-lV-r4l"/>
+                            <constraint firstItem="4fA-Ij-zhf" firstAttribute="top" secondItem="O2c-Pg-mXs" secondAttribute="top" id="ZeX-KH-NB9"/>
+                            <constraint firstAttribute="trailing" secondItem="fRT-3D-FT9" secondAttribute="trailing" id="bNB-S5-Odp"/>
+                            <constraint firstItem="4fA-Ij-zhf" firstAttribute="leading" secondItem="O2c-Pg-mXs" secondAttribute="trailing" constant="8" symbolic="YES" id="jYa-MF-Xq6"/>
+                            <constraint firstItem="O2c-Pg-mXs" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="49" id="on1-nw-BW9"/>
+                        </constraints>
                     </view>
                     <toolbarItems>
                         <barButtonItem title="Item" systemItem="rewind" id="8Q8-zg-eVy">
@@ -45,6 +64,11 @@
                         <barButtonItem systemItem="fastForward" id="TSF-30-OgE">
                             <connections>
                                 <action selector="nextPage:" destination="vXZ-lx-hvc" id="ZJZ-3J-Y3t"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem systemItem="add" id="k3B-N5-6FT" propertyAccessControl="none">
+                            <connections>
+                                <action selector="comingSoon:" destination="vXZ-lx-hvc" id="RYA-Z8-fed"/>
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
@@ -64,6 +88,7 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="activityIndicator" destination="uMi-Co-xZT" id="S22-Vb-L7B"/>
+                        <outlet property="navBar" destination="MFX-CK-VKe" id="yxI-Ht-Twh"/>
                         <outlet property="nextPageButton" destination="TSF-30-OgE" id="hEt-Fr-fPV"/>
                         <outlet property="rewindButton" destination="8Q8-zg-eVy" id="SLj-iH-uRq"/>
                         <outlet property="textField" destination="O2c-Pg-mXs" id="JBP-aG-2vV"/>
